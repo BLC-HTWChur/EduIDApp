@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.eduid.EduIdApp.R;
 import com.eduid.EduIdApp.controller.Config;
+import com.eduid.EduIdApp.controller.Profile.LoginManagement;
 import com.eduid.EduIdApp.controller.ProtocolDiscovery.RSDCallback;
 import com.eduid.EduIdApp.controller.ProtocolDiscovery.RSDManager;
 import com.eduid.EduIdApp.controller.ResponseService;
@@ -90,8 +91,8 @@ public class SelectServiceActivity extends ListActivity {
                     @Override
                     public void onAssertionFinish(ArrayList<EduIDService> authorizedServices) {
                         /**
-                          * Build data to return on third party app
-                          */
+                         * Build data to return on third party app
+                         */
                         JSONObject dataToSend = null;
                         try {
 
@@ -149,12 +150,21 @@ public class SelectServiceActivity extends ListActivity {
             }
         });
 
-        checkIntents();
+
+        rejectButton.post(new Runnable() {
+            @Override
+            public void run() {
+                checkIntents();
+            }
+        });
+
+
 
 
 
 
     }
+
 
 
     /**
@@ -230,34 +240,42 @@ public class SelectServiceActivity extends ListActivity {
             }
 
             /**
-             * Authorize Protocols
+             * If user logged-in, Show services. Otherwise send error to Third Party App
              */
-            if ("application/json".equals(type) && serviceName.equals("authorizeProtocols")) {
+            if(!new LoginManagement(this.getApplicationContext()).isLogged()) {
+                sendDataError("User not logged in.");
+            } else{
 
                 /**
-                 * Loading message
+                 * Authorize Protocols
                  */
-                Toast.makeText(getApplicationContext(), "Loading ...", Toast.LENGTH_SHORT).show();
+                if ("application/json".equals(type) && serviceName.equals("authorizeProtocols")) {
 
-                /**
-                 * Services authentication
-                 */
-                new RSDManager(getApplicationContext()).getRSD(this.protocolList, new RSDCallback() {
-                    @Override
-                    public void rsdAuthenticationFinished(ArrayList<EduIDService> services) {
-                        SelectServiceActivity.this.bindDataList(services);
-                    }
+                    /**
+                     * Loading message
+                     */
+                    Toast.makeText(getApplicationContext(), "Loading ...", Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void rsdAuthenticationError(String errorMessage) {
-                        /**
-                         * Return with an error
-                         */
-                        sendDataError(errorMessage);
+                    /**
+                     * Services authentication
+                     */
+                    new RSDManager(getApplicationContext()).getRSD(this.protocolList, new RSDCallback() {
+                        @Override
+                        public void rsdAuthenticationFinished(ArrayList<EduIDService> services) {
+                            SelectServiceActivity.this.bindDataList(services);
+                        }
 
-                    }
-                });
+                        @Override
+                        public void rsdAuthenticationError(String errorMessage) {
+                            /**
+                             * Return with an error
+                             */
+                            sendDataError(errorMessage);
 
+                        }
+                    });
+
+                }
             }
         }
     }
@@ -276,7 +294,7 @@ public class SelectServiceActivity extends ListActivity {
         /**
          * Send back data to Third Party App
          */
-        new ResponseService(getApplicationContext(), this.third_party_app_id, bundle);
+        new ResponseService(getApplicationContext(), SelectServiceActivity.this.third_party_app_id, bundle);
 
     }
 

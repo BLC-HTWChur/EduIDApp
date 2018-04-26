@@ -34,13 +34,14 @@
             android:id="@+id/userFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="25dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:text="User Full Name"
             android:textAppearance="@android:style/TextAppearance.Material.Small"
             android:textColor="@android:color/black"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
     </LinearLayout>
 
 <!--
@@ -84,6 +85,7 @@
         android:headerDividersEnabled="false"
         app:layout_constraintTop_toBottomOf="@id/guidelineHeader"
         app:layout_constraintBottom_toTopOf="@id/guidelineButtonTop"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -130,14 +132,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    app:layout_constraintGuide_percent="0.85" />
+    app:layout_constraintGuide_percent="0.88" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guidelineButtonBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.97" />
 
 
 </android.support.constraint.ConstraintLayout>

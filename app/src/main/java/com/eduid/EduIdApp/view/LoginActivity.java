@@ -23,6 +23,7 @@ import com.eduid.EduIdApp.R;
 import com.eduid.EduIdApp.controller.Profile.*;
 import com.eduid.EduIdApp.model.EduIdDB;
 
+
 /**
  * Created by usi on 14.04.16.
  */
@@ -40,6 +41,8 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
         loginManagement = new LoginManagement(this.getApplicationContext());
 
         editTextEmail = findViewById(R.id.emailEditText);

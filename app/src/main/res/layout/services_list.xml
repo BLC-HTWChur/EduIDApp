@@ -37,7 +37,9 @@
         android:drawSelectorOnTop="false"
         app:layout_constraintTop_toBottomOf="@id/guidelineHeader"
         app:layout_constraintBottom_toTopOf="@id/guidelineButton"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
         />
 
     <LinearLayout
@@ -45,9 +47,8 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/guidelineButton"
+        app:layout_constraintBottom_toTopOf="@id/guidelineButtonBottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="35dp"
         >
 
         <Button
@@ -93,7 +94,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.88" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineButtonBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.97" />
 
 </android.support.constraint.ConstraintLayout>
 
