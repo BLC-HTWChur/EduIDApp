@@ -4,10 +4,16 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,12 +26,14 @@ import com.eduid.EduIdApp.controller.ResponseService;
 import com.eduid.EduIdApp.controller.ServiceManagement.AssertionManager;
 import com.eduid.EduIdApp.model.EduIdDB;
 import com.eduid.EduIdApp.model.dataobjects.EduIDService;
+import com.eduid.EduIdApp.model.dataobjects.ServicesAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by Yann Cuttaz on 14.12.16.
@@ -60,10 +68,19 @@ public class SelectServiceActivity extends ListActivity {
     private String token;
     private boolean single;
 
+    /**
+     *  Search Bar EdiText
+     */
+    private EditText filterSearchBar;
+    private ServicesAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.services_list);
+
+        filterSearchBar = findViewById(R.id.searchBarText);
+
     }
 
     @Override
@@ -184,24 +201,52 @@ public class SelectServiceActivity extends ListActivity {
     private void bindDataList(ArrayList<EduIDService> services){
         this.services = services;
 //        buildServicesList();
-        ArrayAdapter<EduIDService> adapter = new ArrayAdapter<EduIDService>(this,
-                R.layout.list_layout, services);
-        setListAdapter(adapter);
+        //ArrayAdapter<EduIDService> adapter = new ArrayAdapter<EduIDService>(this, R.layout.list_layout, services);
+        mAdapter = new ServicesAdapter(this, services);
+        setListAdapter(mAdapter);
+
+        /**
+         * Set Listener for the search bar
+         */
+        filterSearchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String text = s.toString().toLowerCase(Locale.getDefault());
+                mAdapter.filter(text);
+                Log.d("EDUID", "Searc bar text changed : " + text );
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         EduIDService selectedService = (EduIDService)getListView().getItemAtPosition(position);
+        //ServicesAdapter adapter = (ServicesAdapter) getListAdapter();
         /**
          * Check if the service is already selected
          */
         if(selectedItems.contains(selectedService)){ // Already selected
-            v.setBackgroundColor(Color.TRANSPARENT);
+            //v.setBackgroundColor(Color.TRANSPARENT);
             this.selectedItems.remove(selectedService);
+            ImageView checkBox = v.findViewById(R.id.checkBoxView);
+            checkBox.setImageResource(R.drawable.animated_check);
+            mAdapter.removeSelected(selectedService);
         }
         else{
-            v.setBackgroundColor(Color.GRAY);
+            //v.setBackgroundColor(Color.GRAY);
             this.selectedItems.add(selectedService);
+            ImageView checkBox = v.findViewById(R.id.checkBoxView);
+            ((Animatable) checkBox.getDrawable()).start();
+            mAdapter.addSelected(selectedService);
         }
     }
 

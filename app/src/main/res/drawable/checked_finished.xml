@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0">
+    <group android:name="background">
+        <path
+            android:name="circle"
+            android:fillColor="@android:color/transparent"
+            android:strokeColor="@color/eduIdBlue"
+            android:strokeWidth="0.5"
+            android:pathData="M12,12m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0" />
+    </group>
+    <group android:name="check">
+        <path
+            android:name="tick"
+            android:pathData="M6,11 l3.5,4 l8,-7"
+            android:strokeColor="@color/eduIdBlue"
+            android:strokeWidth="1" />
+    </group>
+    <!-- PATH DATA  "M6,10 10,15 10,15" -->
+</vector>

@@ -16,14 +16,20 @@
                 <!--<data android:mimeType="text/plain"></data>-->
             </intent-filter>
         </activity>
-        <activity android:name=".view.LoginActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".view.HomeActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name=".view.SelectServiceActivity" android:screenOrientation="portrait">
-            <intent-filter>
+        <activity android:name=".view.LoginActivity" android:screenOrientation="portrait">
+            <intent-filter android:label="@string/intentLabel">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/json"  />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.HomeActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".view.SelectServiceActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
+          <!--  <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/json"  />
+            </intent-filter> -->
         </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

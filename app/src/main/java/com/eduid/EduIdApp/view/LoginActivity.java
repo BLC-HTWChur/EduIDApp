@@ -3,16 +3,20 @@ package com.eduid.EduIdApp.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,12 +39,18 @@ public class LoginActivity extends Activity {
     private EditText editTextPass;
     private Button showPassButton;
     private ImageView barEmail, barPassword;
+    private CheckBox rememberCheckBox;
 
+    private Boolean saveThisAccount;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Set Shared Preferences to check saved username
+        sharedPref = this.getPreferences(MODE_PRIVATE);
 
 
         loginManagement = new LoginManagement(this.getApplicationContext());
@@ -53,6 +63,23 @@ public class LoginActivity extends Activity {
 
         barEmail = findViewById(R.id.inputBarEmail);
         barPassword = findViewById(R.id.inputBarPass);
+
+        rememberCheckBox = findViewById(R.id.rememberCheckBox);
+
+        rememberCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    //Log.d("EDUID", "Check button status: ON!");
+                    saveThisAccount = true;
+                } else {
+                    //Log.d("EDUID", "Check button status: OFF!");
+                    saveThisAccount = false;
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.clear().apply();
+                }
+            }
+        });
 
         editTextEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -82,6 +109,17 @@ public class LoginActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+
+        /**
+         * Check if username saved and available
+         */
+        String saveUsername = sharedPref.getString(getString(R.string.rememberMyAccountKey), getString(R.string.rememberMyAccountDefault));
+        if(saveUsername != getString(R.string.rememberMyAccountDefault)){
+            editTextEmail.setText(saveUsername);
+            rememberCheckBox.setChecked(true);
+        }
+
+
         /**
          * Login button click
          */
@@ -96,6 +134,13 @@ public class LoginActivity extends Activity {
                  */
                 final String username = ((EditText) LoginActivity.this.findViewById(R.id.emailEditText)).getText().toString();
                 final String password = ((EditText) LoginActivity.this.findViewById(R.id.passwordEditText)).getText().toString();
+
+                /**
+                 * Save the username in sharedPreference if the checkBox ticked
+                 */
+                SharedPreferences.Editor  editor = sharedPref.edit();
+                editor.putString(getString(R.string.rememberMyAccountKey), username);
+                editor.apply();
 
                 /**
                  * Authenticate
@@ -127,9 +172,16 @@ public class LoginActivity extends Activity {
 //                                    }
 //                                }
 //                            });
-
-                            ActivitiesManager.startHomeActivity(LoginActivity.this.getApplicationContext());
-                            LoginActivity.this.finish();
+                            /**
+                             * Check the intent, open SelectService if the app is invoked by third party app(ex. Moodle)
+                             */
+                            Log.d("EDUID" , "LOGIN SUCCESFULL : " + getIntent().getAction());
+                            if(getIntent().getAction() != Intent.ACTION_VIEW) {
+                                ActivitiesManager.startHomeActivity(LoginActivity.this.getApplicationContext());
+                                LoginActivity.this.finish();
+                            } else {
+                                ActivitiesManager.startSelectServiceActivity(LoginActivity.this.getApplicationContext(), getIntent());
+                            }
 
                         }
                         else{
@@ -144,11 +196,16 @@ public class LoginActivity extends Activity {
             }
         });
 
+        //Check intent if it comes from launcher or third party app
+        String intentAction = getIntent().getAction();
+
         /**
          * If the user is logged, go on home page
          */
-        if(loginManagement.isLogged()){
+        if(loginManagement.isLogged() && intentAction != Intent.ACTION_VIEW){
             ActivitiesManager.startHomeActivity(this.getApplicationContext());
+        }else if( loginManagement.isLogged() && intentAction == Intent.ACTION_VIEW ) {
+            ActivitiesManager.startSelectServiceActivity(this.getApplicationContext(), getIntent());
         }
 
     }

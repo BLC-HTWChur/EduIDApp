@@ -8,12 +8,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guidelineHeader"
         android:background="@drawable/header_gradient"
-        >
-
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/guidelineHeader"
+        app:layout_constraintTop_toTopOf="parent">
 
     </LinearLayout>
 
@@ -21,35 +19,72 @@
     <TextView
         android:id="@+id/myServicesTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:text="EduID"
         android:textColor="@android:color/black"
         android:textSize="35sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/searchBarGroup"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop" />
+
+    <RelativeLayout
+        android:id="@+id/searchBarGroup"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:background="@drawable/roundcorner_button_gray"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/guidelineHeader"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin" />
+        app:layout_constraintTop_toBottomOf="@id/myServicesTitle">
+
+        <ImageView
+            android:id="@+id/searchIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/ic_search_category_default" />
+
+        <EditText
+            android:id="@+id/searchBarText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/searchIcon"
+            android:background="@android:color/transparent"
+            android:hint="@string/searchBarHint" />
+
+
+    </RelativeLayout>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:drawSelectorOnTop="false"
-        app:layout_constraintTop_toBottomOf="@id/guidelineHeader"
-        app:layout_constraintBottom_toTopOf="@id/guidelineButton"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        />
+        android:drawSelectorOnTop="false"
+        app:layout_constraintBottom_toTopOf="@id/guidelineButton"
+        app:layout_constraintTop_toBottomOf="@id/guidelineHeader" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/guidelineButton"
-        app:layout_constraintBottom_toTopOf="@id/guidelineButtonBottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintBottom_toTopOf="@id/guidelineButtonBottom"
+        app:layout_constraintTop_toBottomOf="@id/guidelineButton">
 
         <Button
             android:id="@+id/rejectButton"
@@ -102,6 +137,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.97" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
 
 </android.support.constraint.ConstraintLayout>
 

@@ -14,7 +14,9 @@
     <color name="eduIdGray">#dda49696</color>
     <color name="buttonRed">#FF3B30</color>
     <color name="buttonLightGray">#E4E4E4</color>
+    <color name="searchBarGray">#636e72</color>
     <color name="loginButtonBlue">#007AFF</color>
     <color name="logoutButtonYellow">#FF9500</color>
+
 
 </resources>

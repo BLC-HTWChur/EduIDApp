@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.eduid.EduIdApp.view.HomeActivity;
 import com.eduid.EduIdApp.view.LoginActivity;
+import com.eduid.EduIdApp.view.SelectServiceActivity;
 
 /**
  * Created by Yann Cuttaz on 14.04.16.
@@ -29,6 +30,12 @@ public class ActivitiesManager {
     public static void startHomeActivity(Context context){
         setInitialContext(context);
         startActivity(HomeActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    }
+
+    public static void startSelectServiceActivity(Context context, Intent intent){
+        setInitialContext(context);
+        intent.setClass(initialContext, SelectServiceActivity.class);
+        initialContext.startActivity(intent);
     }
 
 
