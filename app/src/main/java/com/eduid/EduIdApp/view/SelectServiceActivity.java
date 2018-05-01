@@ -1,5 +1,6 @@
 package com.eduid.EduIdApp.view;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -34,6 +35,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import dmax.dialog.SpotsDialog;
 
 /**
  * Created by Yann Cuttaz on 14.12.16.
@@ -74,18 +77,30 @@ public class SelectServiceActivity extends ListActivity {
     private EditText filterSearchBar;
     private ServicesAdapter mAdapter;
 
+    /**
+     *  Loading indicator
+     */
+    private AlertDialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.services_list);
 
         filterSearchBar = findViewById(R.id.searchBarText);
-
+        mDialog = new SpotsDialog(this);
     }
 
     @Override
     public void onBackPressed() {
         // Nothing
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        finish();
     }
 
     @Override
@@ -100,6 +115,14 @@ public class SelectServiceActivity extends ListActivity {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /**
+                 * Loading indicator (AlertDialog)
+                 */
+                Log.d("EDUID", "Accept button pressed, selected Services: " + selectedItems.size());
+                if(selectedItems.size() <= 0){
+                    return;
+                }
+                mDialog.show();
 
                 /**
                  * Assertion
@@ -128,11 +151,12 @@ public class SelectServiceActivity extends ListActivity {
 
                             Config.debug("data returned: " + bundle.getString("dataJSON"));
 
-
+                           mDialog.dismiss();
                             /**
                              * Send back data to Third Party App
                              */
                             new ResponseService(getApplicationContext(), SelectServiceActivity.this.third_party_app_id, bundle);
+
 
                         } catch (JSONException e) {
                             sendDataError("Error on build JSON data.");
@@ -141,6 +165,7 @@ public class SelectServiceActivity extends ListActivity {
 
                     @Override
                     public void onAssertionError(String errorMessage) {
+                        mDialog.dismiss();
                         sendDataError("Assertion error.");
                     }
                 });
@@ -174,11 +199,6 @@ public class SelectServiceActivity extends ListActivity {
                 checkIntents();
             }
         });
-
-
-
-
-
 
     }
 
@@ -299,7 +319,7 @@ public class SelectServiceActivity extends ListActivity {
                     /**
                      * Loading message
                      */
-                    Toast.makeText(getApplicationContext(), "Loading ...", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Loading ...", Toast.LENGTH_SHORT).show();
 
                     /**
                      * Services authentication

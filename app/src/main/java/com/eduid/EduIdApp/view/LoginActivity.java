@@ -1,6 +1,7 @@
 package com.eduid.EduIdApp.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,8 @@ import com.eduid.EduIdApp.R;
 import com.eduid.EduIdApp.controller.Profile.*;
 import com.eduid.EduIdApp.model.EduIdDB;
 
+import dmax.dialog.SpotsDialog;
+
 
 /**
  * Created by usi on 14.04.16.
@@ -40,6 +43,7 @@ public class LoginActivity extends Activity {
     private Button showPassButton;
     private ImageView barEmail, barPassword;
     private CheckBox rememberCheckBox;
+    private AlertDialog mDialog;
 
     private Boolean saveThisAccount;
     private SharedPreferences sharedPref;
@@ -128,10 +132,15 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+                /**Loading indicator
+                */
+                mDialog = new SpotsDialog(LoginActivity.this);
+                mDialog.show();
 
                 /**
                  * Get data of user
                  */
+
                 final String username = ((EditText) LoginActivity.this.findViewById(R.id.emailEditText)).getText().toString();
                 final String password = ((EditText) LoginActivity.this.findViewById(R.id.passwordEditText)).getText().toString();
 
@@ -150,7 +159,7 @@ public class LoginActivity extends Activity {
                     public void onAuthenticationFinish(boolean authenticateSuccessful) {
 
                         Context ctx = LoginActivity.this.getApplicationContext();
-
+                        mDialog.dismiss();
                         if(authenticateSuccessful){
 
                             /**
@@ -193,6 +202,9 @@ public class LoginActivity extends Activity {
                     }
                 });
 
+                /**
+                 * END Button OnClickListener
+                */
             }
         });
 
