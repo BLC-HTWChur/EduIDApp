@@ -1,7 +1,7 @@
 # EduIDApp
 
 The main android native mobile app for EduID-Mobile project.
-This will act as a Authorization provider, and provides authorization service(EduID) to the android user.
+This will act as an authorization provider, and provides authorization service(EduID) to the android user.
 
 EduID App communicates directly to the Trust Agent(OIDC Provider) mostly for the authentication and also the resource provider for the authorization process.
 
