@@ -1,4 +1,4 @@
-# EduIDApp
+# EduID Android
 
 The main android native mobile app for EduID-Mobile project.
 This will act as an authorization provider, and provides authorization service(EduID) to the android user.
